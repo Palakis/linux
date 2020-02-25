@@ -566,8 +566,12 @@ int snd_mixart_setup_firmware(struct mixart_mgr *mgr)
 		/* fake hwdep dsp record */
 		err = mixart_dsp_load(mgr, i, fw_entry);
 		release_firmware(fw_entry);
-		if (err < 0)
+		if (err < 0) {
+			dev_err(&mgr->pci->dev,
+				"miXart: firmware upload failed for file %s\n",
+				fw_files[i]);
 			return err;
+		}
 		mgr->dsp_loaded |= 1 << i;
 	}
 	return 0;
